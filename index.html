@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Valentine 💖</title>
+<title>Wordle</title>
 
 <style>
 
@@ -14,17 +14,37 @@ body{
  overflow:hidden;
 }
 
+/* Smooth transitions between screens */
+
 .screen{
  display:none;
  height:100vh;
  justify-content:center;
  align-items:center;
  flex-direction:column;
+ opacity:0;
+ transition:opacity .6s ease;
 }
 
-.active{ display:flex; }
+.active{
+ display:flex;
+ opacity:1;
+}
 
-/* ---------- WORDLE SCREEN ---------- */
+/* ---------- ANIMATIONS ---------- */
+
+@keyframes float{
+ 0%{transform:translateY(0)}
+ 50%{transform:translateY(-6px)}
+ 100%{transform:translateY(0)}
+}
+
+@keyframes heartRise{
+ from{transform:translateY(80px) scale(.8);opacity:0}
+ to{transform:translateY(-700px) scale(1.2);opacity:1}
+}
+
+/* ---------- WORDLE ---------- */
 
 .wordle{
  background:linear-gradient(#ffffff,#ffe4ec);
@@ -39,8 +59,14 @@ body{
  display:grid;
  grid-template-columns:repeat(5,64px);
  gap:10px;
- justify-content:center;
  margin-bottom:25px;
+}
+
+.grid3{
+ display:grid;
+ grid-template-columns:repeat(3,64px);
+ gap:10px;
+ margin-bottom:10px;
 }
 
 .tile{
@@ -53,7 +79,7 @@ body{
  align-items:center;
  font-size:28px;
  font-weight:bold;
- color:#000; /* ⭐ BLACK TEXT */
+ color:#000;
  box-shadow:0 3px 0 #e7a8ba;
 }
 
@@ -75,7 +101,6 @@ body{
  box-shadow:0 3px 0 #e7a8ba;
 }
 
-.key.green{background:#2ecc71;color:white}
 .key.yellow{background:#f6c344;color:white}
 .key.gray{background:#bbb;color:white}
 
@@ -85,127 +110,133 @@ body{
  padding:12px 18px;
  border-radius:12px;
  color:#d6336c;
- font-size:16px;
  margin:5px;
  cursor:pointer;
  box-shadow:0 3px 0 #e7a8ba;
- transition:opacity .15s;
 }
 
-.btn:active{ opacity:.5; }
-
-/* ---------- VALENTINE SCREEN ---------- */
+/* ---------- VALENTINE ---------- */
 
 .valentine{
  background:linear-gradient(#ffffff,#ffe4ec);
- color:#d6336c;
- text-align:center;
-}
-
-.vgrid{
- display:grid;
- grid-template-columns:repeat(5,70px);
- gap:12px;
- justify-content:center;
- margin-bottom:30px;
+ cursor:pointer;
 }
 
 .vtile{
- width:70px;
- height:70px;
- border-radius:14px;
- display:flex;
- justify-content:center;
- align-items:center;
- font-size:26px;
- font-weight:bold;
- color:white;
- box-shadow:0 4px 0 #e08aa2;
-}
-
-.vtile:empty{
- background:#ffdce6;
- box-shadow:0 3px 0 #e7a8ba;
-}
-
-.vtile:not(:empty){
- background:#ffb3c7;
-}
-
-/* ⭐ SINGLE ROW WORD */
-
-.bottom{
- display:grid;
- grid-template-columns:repeat(10,70px);
- gap:12px;
- justify-content:center;
+ animation:float 2s infinite ease-in-out;
 }
 
 .bottom div{
+ animation:float 3s infinite ease-in-out;
+}
+
+/* ---------- SECOND TEXT ---------- */
+
+.typeText{
+ color:#d6336c;
+ font-weight:bold;
+ margin-bottom:8px;
+}
+
+.hint{
+ color:#ff8fb3;
+}
+
+/* ---------- POPUP ---------- */
+
+.popup{
+ position:fixed;
+ inset:0;
+ display:none;
+ justify-content:center;
+ align-items:center;
+ background:rgba(0,0,0,.4);
+}
+
+.popupBox{
+ background:white;
+ padding:28px;
+ border-radius:16px;
+ text-align:center;
+}
+
+#popupText{
+ color:#d6336c;
+ margin-bottom:18px;
+ font-weight:bold;
+}
+
+.popupBox button{
+ background:#ffdce6;
+ border:none;
+ padding:10px 18px;
+ border-radius:12px;
+ color:#d6336c;
+ font-weight:bold;
+ cursor:pointer;
+ box-shadow:0 3px 0 #e7a8ba;
+}
+
+/* ---------- YES SCREEN ---------- */
+
+.yesScreen{
+ background:linear-gradient(#ffffff,#ffe4ec);
+ color:#d6336c;
+ text-align:center;
+ overflow:hidden;
+}
+
+.yesTile{
  width:70px;
  height:70px;
  background:#ffb3c7;
  border-radius:14px;
  display:flex;
- align-items:center;
  justify-content:center;
+ align-items:center;
+ font-size:30px;
  font-weight:bold;
- font-size:26px;
  color:white;
  box-shadow:0 4px 0 #e08aa2;
+ animation:float 1.6s infinite;
+}
+
+.yesTiles{
+ display:flex;
+ gap:12px;
+ margin:20px;
+}
+
+.heart{
+ position:absolute;
+ font-size:24px;
+ color:#ff6fa5;
+ filter:drop-shadow(0 0 6px pink);
+ animation:heartRise linear infinite;
 }
 
 </style>
 </head>
 
 <body>
-
-<!-- WORDLE -->
-
+ <!-- WORDLE -->
 <div id="game" class="screen active wordle">
-
 <div class="wrapper">
-
 <div id="grid" class="grid"></div>
 <div id="keyboard" class="kb"></div>
-
 <button class="btn" onclick="resetGame()">Play Again</button>
 <button class="btn" onclick="goValentine()">Give Up?</button>
-
 </div>
 </div>
-
 
 <!-- VALENTINE -->
-
-<div id="val" class="screen valentine">
+<div id="val" class="screen valentine" onclick="goSecond()">
 
 <div class="vgrid">
-
-<div class="vtile">W</div>
-<div class="vtile">I</div>
-<div class="vtile">L</div>
-<div class="vtile">L</div>
-<div class="vtile"></div>
-
-<div class="vtile">Y</div>
-<div class="vtile">O</div>
-<div class="vtile">U</div>
-<div class="vtile"></div>
-<div class="vtile"></div>
-
-<div class="vtile">B</div>
-<div class="vtile">E</div>
-<div class="vtile"></div>
-<div class="vtile"></div>
-<div class="vtile"></div>
-
-<div class="vtile">M</div>
-<div class="vtile">Y</div>
-<div class="vtile"></div>
-<div class="vtile"></div>
-<div class="vtile"></div>
-
+<div class="vtile">W</div><div class="vtile">I</div><div class="vtile">L</div><div class="vtile">L</div><div class="vtile"></div>
+<div class="vtile">Y</div><div class="vtile">O</div><div class="vtile">U</div><div class="vtile"></div><div class="vtile"></div>
+<div class="vtile">B</div><div class="vtile">E</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
+<div class="vtile">M</div><div class="vtile">Y</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
 </div>
 
 <div class="bottom">
@@ -216,23 +247,56 @@ body{
 
 </div>
 
+<!-- SECOND -->
+<div id="second" class="screen wordle">
+<div class="typeText">Type your answer...</div>
+<div id="grid2" class="grid3"></div>
+<div id="keyboard2" class="kb"></div>
+<p class="hint">May hint na yan baby..</p>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+<div class="popupBox">
+<div id="popupText"></div>
+<button onclick="closePopup()">Try Again</button>
+</div>
+</div>
+
+<!-- YES -->
+<div id="yesScreen" class="screen yesScreen">
+<h1>Will you be my Valentine?</h1>
+
+<div class="yesTiles">
+<div class="yesTile">Y</div>
+<div class="yesTile">E</div>
+<div class="yesTile">S</div>
+</div>
+
+<h3>I love you, Andrea Jane.</h3>
+<p>See you on the 14th, my Valentine. 😛</p>
+</div>
+
 <script>
 
-function goValentine(){
- document.getElementById("game").classList.remove("active");
- document.getElementById("val").classList.add("active");
+/* ---------- SCREEN SWITCH ---------- */
+
+function switchScreen(from,to){
+ document.getElementById(from).classList.remove("active");
+ setTimeout(()=>document.getElementById(to).classList.add("active"),250);
 }
+
+function goValentine(){ switchScreen("game","val"); }
+function goSecond(){ switchScreen("val","second"); }
+
+/* ---------- WORDLE ---------- */
 
 const answer="ilyaj";
 const phrase="willyoubemyvalentine";
-
-let row=0;
-let current="";
+let row=0,current="";
+const layout=["qwertyuiop","asdfghjkl","zxcvbnm"];
 const grid=document.getElementById("grid");
 const kb=document.getElementById("keyboard");
-
-const layout=["qwertyuiop","asdfghjkl","zxcvbnm"];
-let keyMap={};
 
 for(let i=0;i<30;i++){
  let d=document.createElement("div");
@@ -243,86 +307,152 @@ for(let i=0;i<30;i++){
 layout.forEach(line=>{
  let r=document.createElement("div");
  r.className="row";
-
  line.split("").forEach(l=>{
   let k=document.createElement("div");
   k.className="key";
   k.textContent=l.toUpperCase();
-  k.onclick=()=>press(l);
+  k.onclick=()=>{ if(current.length<5){ current+=l; draw(); } };
   r.appendChild(k);
-  keyMap[l]=k;
  });
-
  kb.appendChild(r);
 });
 
-let r=document.createElement("div");
-r.className="row";
+let rowCtrl=document.createElement("div");
+rowCtrl.className="row";
 
 let enter=document.createElement("div");
 enter.className="key";
 enter.textContent="ENTER";
 enter.onclick=submit;
-r.appendChild(enter);
+rowCtrl.appendChild(enter);
 
 let del=document.createElement("div");
 del.className="key";
 del.textContent="⌫";
 del.onclick=()=>{current=current.slice(0,-1);draw();};
-r.appendChild(del);
+rowCtrl.appendChild(del);
 
-kb.appendChild(r);
-
-function press(l){
- if(current.length<5){
-  current+=l;
-  draw();
- }
-}
+kb.appendChild(rowCtrl);
 
 function draw(){
- for(let i=0;i<5;i++){
+ for(let i=0;i<5;i++)
   grid.children[row*5+i].textContent=(current[i]||"").toUpperCase();
- }
-}
-
-function colorKey(letter,color){
- let k=keyMap[letter];
- if(!k) return;
-
- if(k.classList.contains("green")) return;
- if(k.classList.contains("yellow") && color==="gray") return;
-
- k.classList.remove("green","yellow","gray");
- k.classList.add(color);
 }
 
 function submit(){
  if(current.length!==5) return;
-
  for(let i=0;i<5;i++){
-  let tile=grid.children[row*5+i];
+  let t=grid.children[row*5+i];
   let l=current[i];
-  let color;
-
-  if(l===answer[i]) color="green";
-  else if(answer.includes(l) || phrase.includes(l)) color="yellow";
-  else color="gray";
-
-  tile.classList.add(color);
-  colorKey(l,color);
+  t.classList.add(
+   l===answer[i]?"green":
+   (answer.includes(l)||phrase.includes(l))?"yellow":"gray"
+  );
  }
-
- if(current===answer){
-   setTimeout(goValentine,700);
- }
-
- row++;
- current="";
+ if(current===answer) setTimeout(goValentine,700);
+ row++; current="";
 }
 
-function resetGame(){
- location.reload();
+function resetGame(){ location.reload(); }
+
+/* ---------- SECOND WORDLE ---------- */
+
+let guess="",noCount=0;
+const g2=document.getElementById("grid2");
+const kb2=document.getElementById("keyboard2");
+
+for(let i=0;i<3;i++){
+ let t=document.createElement("div");
+ t.className="tile";
+ g2.appendChild(t);
+}
+
+layout.forEach(line=>{
+ let r=document.createElement("div");
+ r.className="row";
+ line.split("").forEach(l=>{
+  let k=document.createElement("div");
+  k.className="key";
+  k.textContent=l.toUpperCase();
+  if("yes".includes(l)) k.classList.add("yellow");
+  if("no".includes(l)) k.classList.add("gray");
+
+  k.onclick=()=>{
+   if(guess.length<3){
+    guess+=l;
+    g2.children[guess.length-1].textContent=l.toUpperCase();
+   }
+  };
+  r.appendChild(k);
+ });
+ kb2.appendChild(r);
+});
+
+let r2=document.createElement("div");
+r2.className="row";
+
+let e2=document.createElement("div");
+e2.className="key";
+e2.textContent="ENTER";
+
+e2.onclick=()=>{
+ if(guess==="no"){
+  noCount++;
+  const msgs=[
+   "NO?????? WHY??????? BAKIT???????",
+   "AYOKO. ULIT. MALING SAGOT.",
+   "what the....",
+   "sure ka na dyan, baby?",
+   "pls say yes",
+   "PLEASE SAY YES",
+   "nagmamakaawa na ko dito oh :(",
+   "baby, mag-yes ka na please :((("
+  ];
+  showPopup(msgs[Math.min(noCount-1,msgs.length-1)]);
+ }
+
+ else if(guess==="yes"){
+  switchScreen("second","yesScreen");
+  hearts();
+ }
+
+ guess="";
+ g2.childNodes.forEach(n=>n.textContent="");
+};
+
+r2.appendChild(e2);
+
+let d2=document.createElement("div");
+d2.className="key";
+d2.textContent="⌫";
+d2.onclick=()=>{
+ guess=guess.slice(0,-1);
+ g2.children[guess.length].textContent="";
+};
+r2.appendChild(d2);
+kb2.appendChild(r2);
+
+/* ---------- POPUP ---------- */
+
+function showPopup(t){
+ document.getElementById("popupText").textContent=t;
+ document.getElementById("popup").style.display="flex";
+}
+function closePopup(){
+ document.getElementById("popup").style.display="none";
+}
+
+/* ---------- HEART MAGIC ---------- */
+
+function hearts(){
+ for(let i=0;i<50;i++){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤";
+  h.style.left=Math.random()*100+"%";
+  h.style.animationDuration=3+Math.random()*3+"s";
+  document.getElementById("yesScreen").appendChild(h);
+ }
 }
 
 </script>
