@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Valentine 💖</title>
+<title>WORDLE</title>
 
 <style>
 
@@ -356,16 +356,32 @@ function submit(){
  if(current.length!==5) return;
 
  for(let i=0;i<5;i++){
-  let t=grid.children[row*5+i];
-  t.classList.add("flip");
+  let tile = grid.children[row*5+i];
+  let letter = current[i];
+  let color;
 
-  setTimeout(()=>{
-   let l=current[i];
-   t.classList.add(
-    l===answer[i]?"green":
-    (answer.includes(l)||phrase.includes(l))?"yellow":"gray"
-   );
-  },150);
+  if(letter === answer[i]) color="green";
+  else if(answer.includes(letter) || phrase.includes(letter)) color="yellow";
+  else color="gray";
+
+  tile.classList.add(color);
+
+  /* ---------- UPDATE KEYBOARD COLOR ---------- */
+  document.querySelectorAll(".key").forEach(k=>{
+     if(k.textContent === letter.toUpperCase()){
+        if(color==="green"){
+           k.classList.remove("yellow","gray");
+           k.classList.add("green");
+        }
+        else if(color==="yellow" && !k.classList.contains("green")){
+           k.classList.remove("gray");
+           k.classList.add("yellow");
+        }
+        else if(color==="gray" && !k.classList.contains("green") && !k.classList.contains("yellow")){
+           k.classList.add("gray");
+        }
+     }
+  });
  }
 
  if(current===answer) setTimeout(goValentine,700);
