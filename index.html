@@ -214,14 +214,6 @@ to{transform:translateY(-700px);opacity:1}
 }
 .shake{ animation:shake .4s }
 
-/* CONFETTI */
-.confetti{
- position:absolute;
- width:8px;height:8px;
- background:#ff6fa5;
- animation:fall 2s linear forwards;
-}
-
 @keyframes fall{
  from{transform:translateY(-50px) rotate(0)}
  to{transform:translateY(700px) rotate(720deg)}
@@ -319,14 +311,31 @@ for(let i=0;i<30;i++){
 layout.forEach(line=>{
  let r=document.createElement("div");
  r.className="row";
+
  line.split("").forEach(l=>{
   let k=document.createElement("div");
   k.className="key";
   k.textContent=l.toUpperCase();
-  k.onclick=()=>{ if(current.length<5){ current+=l; draw(); } };
+
+  /* PERMANENT HIGHLIGHT */
+  if(["y","e","s"].includes(l)){
+     k.classList.add("yellow");
+  }
+  else if(["n","o"].includes(l)){
+     k.classList.add("gray");
+  }
+
+  k.onclick=()=>{
+   if(guess.length<3){
+     guess+=l;
+     g2.children[guess.length-1].textContent=l.toUpperCase();
+   }
+  };
+
   r.appendChild(k);
  });
- kb.appendChild(r);
+
+ kb2.appendChild(r);
 });
 
 let r=document.createElement("div");
@@ -456,7 +465,6 @@ e2.onclick=()=>{
 else if(guess==="yes"){
  switchScreen("second","yesScreen");
  hearts();
- confetti();
 }
 
  guess="";
@@ -496,18 +504,6 @@ function hearts(){
   h.style.left=Math.random()*100+"%";
   h.style.animationDuration=3+Math.random()*3+"s";
   document.getElementById("yesScreen").appendChild(h);
- }
-}
-
-/* ---------- CONFETTI ---------- */
-
-function confetti(){
- for(let i=0;i<80;i++){
-  let c=document.createElement("div");
-  c.className="confetti";
-  c.style.left=Math.random()*100+"%";
-  c.style.background=["#ff6fa5","#ffc0cb","#ffdce6"][Math.floor(Math.random()*3)];
-  document.getElementById("yesScreen").appendChild(c);
  }
 }
 
