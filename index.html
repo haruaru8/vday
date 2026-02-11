@@ -2,19 +2,17 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wordle</title>
+<title>Valentine 💖</title>
 
 <style>
 
-/* ---------- GENERAL ---------- */
+/* ---------- BASE ---------- */
 
 body{
  margin:0;
  font-family:Arial,sans-serif;
  overflow:hidden;
 }
-
-/* Smooth transitions between screens */
 
 .screen{
  display:none;
@@ -31,55 +29,43 @@ body{
  opacity:1;
 }
 
-/* ---------- ANIMATIONS ---------- */
+.wordle{ background:linear-gradient(#fff,#ffe4ec); }
+
+/* ---------- FLOAT ANIMATION ---------- */
 
 @keyframes float{
- 0%{transform:translateY(0)}
- 50%{transform:translateY(-6px)}
- 100%{transform:translateY(0)}
+0%{transform:translateY(0)}
+50%{transform:translateY(-6px)}
+100%{transform:translateY(0)}
 }
 
 @keyframes heartRise{
- from{transform:translateY(80px) scale(.8);opacity:0}
- to{transform:translateY(-700px) scale(1.2);opacity:1}
+from{transform:translateY(60px);opacity:0}
+to{transform:translateY(-700px);opacity:1}
 }
 
 /* ---------- WORDLE ---------- */
 
-.wordle{
- background:linear-gradient(#ffffff,#ffe4ec);
-}
-
-.wrapper{
- text-align:center;
- width:360px;
-}
+.wrapper{ width:360px;text-align:center;}
 
 .grid{
  display:grid;
  grid-template-columns:repeat(5,64px);
- gap:10px;
- margin-bottom:25px;
+ gap:10px;margin-bottom:25px;
 }
 
 .grid3{
  display:grid;
  grid-template-columns:repeat(3,64px);
- gap:10px;
- margin-bottom:10px;
+ gap:10px;margin-bottom:10px;
 }
 
 .tile{
- width:64px;
- height:64px;
+ width:64px;height:64px;
  border-radius:14px;
  background:#ffdce6;
- display:flex;
- justify-content:center;
- align-items:center;
- font-size:28px;
- font-weight:bold;
- color:#000;
+ display:flex;align-items:center;justify-content:center;
+ font-size:28px;font-weight:bold;color:#000;
  box-shadow:0 3px 0 #e7a8ba;
 }
 
@@ -92,126 +78,121 @@ body{
 
 .key{
  background:#ffdce6;
- padding:12px;
- border-radius:10px;
- min-width:28px;
- text-align:center;
- cursor:pointer;
- font-weight:bold;
+ padding:12px;border-radius:10px;
+ cursor:pointer;font-weight:bold;
  box-shadow:0 3px 0 #e7a8ba;
 }
-
 .key.yellow{background:#f6c344;color:white}
 .key.gray{background:#bbb;color:white}
 
+/* ---------- BUTTON ---------- */
+
 .btn{
- background:#ffdce6;
- border:none;
+ background:#ffdce6;border:none;
  padding:12px 18px;
  border-radius:12px;
- color:#d6336c;
- margin:5px;
+ color:#d6336c;margin:5px;
  cursor:pointer;
  box-shadow:0 3px 0 #e7a8ba;
 }
 
-/* ---------- VALENTINE ---------- */
+/* ---------- VALENTINE GRID (FIXED) ---------- */
 
-.valentine{
- background:linear-gradient(#ffffff,#ffe4ec);
- cursor:pointer;
+.valentine{ background:linear-gradient(#fff,#ffe4ec); cursor:pointer;}
+
+.vgrid{
+ display:grid;
+ grid-template-columns:repeat(5,70px);
+ gap:12px;
+ margin-bottom:30px;
 }
 
 .vtile{
+ width:70px;height:70px;
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-size:26px;font-weight:bold;color:white;
+ background:#ffb3c7;
+ box-shadow:0 4px 0 #e08aa2;
  animation:float 2s infinite ease-in-out;
 }
 
+.vtile:empty{
+ background:#ffdce6;
+ box-shadow:0 3px 0 #e7a8ba;
+}
+
+/* bottom tiles */
+
+.bottom{
+ display:grid;
+ grid-template-columns:repeat(10,70px);
+ gap:12px;
+}
+
 .bottom div{
+ width:70px;height:70px;
+ background:#ffb3c7;
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-weight:bold;font-size:26px;color:white;
+ box-shadow:0 4px 0 #e08aa2;
  animation:float 3s infinite ease-in-out;
 }
 
 /* ---------- SECOND TEXT ---------- */
 
-.typeText{
- color:#d6336c;
- font-weight:bold;
- margin-bottom:8px;
-}
-
-.hint{
- color:#ff8fb3;
-}
+.typeText{ color:#d6336c;font-weight:bold;margin-bottom:8px;}
+.hint{ color:#ff8fb3; }
 
 /* ---------- POPUP ---------- */
 
 .popup{
- position:fixed;
- inset:0;
- display:none;
- justify-content:center;
- align-items:center;
+ position:fixed;inset:0;
+ display:none;justify-content:center;align-items:center;
  background:rgba(0,0,0,.4);
 }
 
 .popupBox{
- background:white;
- padding:28px;
- border-radius:16px;
- text-align:center;
+ background:white;padding:28px;
+ border-radius:16px;text-align:center;
 }
 
 #popupText{
  color:#d6336c;
- margin-bottom:18px;
+ margin-bottom:20px;
  font-weight:bold;
 }
 
 .popupBox button{
- background:#ffdce6;
- border:none;
- padding:10px 18px;
- border-radius:12px;
- color:#d6336c;
- font-weight:bold;
- cursor:pointer;
+ background:#ffdce6;border:none;
+ padding:10px 18px;border-radius:12px;
+ color:#d6336c;font-weight:bold;
  box-shadow:0 3px 0 #e7a8ba;
 }
 
-/* ---------- YES SCREEN ---------- */
+/* ---------- YES ---------- */
 
 .yesScreen{
- background:linear-gradient(#ffffff,#ffe4ec);
- color:#d6336c;
- text-align:center;
+ background:linear-gradient(#fff,#ffe4ec);
+ text-align:center;color:#d6336c;
  overflow:hidden;
 }
 
+.yesTiles{display:flex;gap:12px;margin:20px;}
+
 .yesTile{
- width:70px;
- height:70px;
- background:#ffb3c7;
- border-radius:14px;
- display:flex;
- justify-content:center;
- align-items:center;
- font-size:30px;
- font-weight:bold;
- color:white;
+ width:70px;height:70px;
+ background:#ffb3c7;border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-size:30px;font-weight:bold;color:white;
  box-shadow:0 4px 0 #e08aa2;
  animation:float 1.6s infinite;
 }
 
-.yesTiles{
- display:flex;
- gap:12px;
- margin:20px;
-}
-
 .heart{
- position:absolute;
- font-size:24px;
+ position:absolute;font-size:22px;
  color:#ff6fa5;
- filter:drop-shadow(0 0 6px pink);
  animation:heartRise linear infinite;
 }
 
@@ -317,26 +298,27 @@ layout.forEach(line=>{
  kb.appendChild(r);
 });
 
-let rowCtrl=document.createElement("div");
-rowCtrl.className="row";
+let r=document.createElement("div");
+r.className="row";
 
 let enter=document.createElement("div");
 enter.className="key";
 enter.textContent="ENTER";
 enter.onclick=submit;
-rowCtrl.appendChild(enter);
+r.appendChild(enter);
 
 let del=document.createElement("div");
 del.className="key";
 del.textContent="⌫";
 del.onclick=()=>{current=current.slice(0,-1);draw();};
-rowCtrl.appendChild(del);
+r.appendChild(del);
 
-kb.appendChild(rowCtrl);
+kb.appendChild(r);
 
 function draw(){
- for(let i=0;i<5;i++)
+ for(let i=0;i<5;i++){
   grid.children[row*5+i].textContent=(current[i]||"").toUpperCase();
+ }
 }
 
 function submit(){
@@ -355,7 +337,7 @@ function submit(){
 
 function resetGame(){ location.reload(); }
 
-/* ---------- SECOND WORDLE ---------- */
+/* ---------- SECOND ---------- */
 
 let guess="",noCount=0;
 const g2=document.getElementById("grid2");
@@ -429,6 +411,7 @@ d2.onclick=()=>{
  guess=guess.slice(0,-1);
  g2.children[guess.length].textContent="";
 };
+
 r2.appendChild(d2);
 kb2.appendChild(r2);
 
@@ -456,6 +439,5 @@ function hearts(){
 }
 
 </script>
-
 </body>
 </html>
