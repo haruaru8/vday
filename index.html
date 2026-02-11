@@ -2,26 +2,40 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Valentine 💗</title>
+<title>Valentine 💖</title>
 
 <style>
 
+/* ---------- GENERAL ---------- */
+
 body{
  margin:0;
- font-family:Arial, sans-serif;
- background:linear-gradient(#ffffff,#ffe4ec);
- display:flex;
+ font-family:Arial,sans-serif;
+ overflow:hidden;
+}
+
+.screen{
+ display:none;
+ height:100vh;
  justify-content:center;
  align-items:center;
- height:100vh;
+ flex-direction:column;
+}
+
+.active{
+ display:flex;
+}
+
+/* ---------- WORDLE SCREEN ---------- */
+
+.wordle{
+ background:linear-gradient(#ffffff,#ffe4ec);
 }
 
 .wrapper{
  text-align:center;
  width:360px;
 }
-
-/* GRID */
 
 .grid{
  display:grid;
@@ -44,23 +58,12 @@ body{
  color:#333;
 }
 
-.green{ background:#2ecc71; color:white;}
-.yellow{ background:#f6c344; color:white;}
-.gray{ background:#cfcfcf; color:white;}
+.green{background:#2ecc71;color:white;}
+.yellow{background:#f6c344;color:white;}
+.gray{background:#cfcfcf;color:white;}
 
-/* KEYBOARD */
-
-.kb{
- display:flex;
- flex-direction:column;
- gap:8px;
-}
-
-.row{
- display:flex;
- justify-content:center;
- gap:6px;
-}
+.kb{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;justify-content:center;gap:6px}
 
 .key{
  background:#ffdce6;
@@ -74,15 +77,7 @@ body{
 
 .key.green{background:#2ecc71;color:white}
 .key.yellow{background:#f6c344;color:white}
-.key.gray{background:#bdbdbd;color:white}
-
-.wide{padding:12px 16px}
-
-/* BUTTONS */
-
-.controls{
- margin-top:15px;
-}
+.key.gray{background:#bbb;color:white}
 
 .btn{
  background:#ff6fa5;
@@ -93,12 +88,47 @@ body{
  font-size:16px;
  margin:5px;
  cursor:pointer;
- box-shadow:0 4px #cc4f7d;
 }
 
-.btn:active{
- transform:translateY(2px);
- box-shadow:none;
+/* ---------- VALENTINE SCREEN ---------- */
+
+.valentine{
+ background:radial-gradient(circle,#a00018,#50000a);
+ color:white;
+ text-align:center;
+}
+
+.vgrid{
+ display:grid;
+ grid-template-columns:repeat(5,60px);
+ gap:8px;
+ margin-bottom:20px;
+}
+
+.vtile{
+ width:60px;
+ height:60px;
+ background:#e03131;
+ border-radius:8px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ font-size:22px;
+ font-weight:bold;
+}
+
+.bottom{
+ display:flex;
+ gap:6px;
+ flex-wrap:wrap;
+ justify-content:center;
+}
+
+.bottom div{
+ background:#e03131;
+ padding:12px;
+ border-radius:8px;
+ font-weight:bold;
 }
 
 </style>
@@ -106,20 +136,70 @@ body{
 
 <body>
 
+<!-- ================= WORDLE SCREEN ================= -->
+
+<div id="game" class="screen active wordle">
+
 <div class="wrapper">
 
 <div id="grid" class="grid"></div>
-
 <div id="keyboard" class="kb"></div>
 
-<div class="controls">
 <button class="btn" onclick="resetGame()">Play Again</button>
-<button class="btn" onclick="giveUp()">Give Up?</button>
+<button class="btn" onclick="goValentine()">Give Up?</button>
+
+</div>
+</div>
+
+
+<!-- ================= VALENTINE SCREEN ================= -->
+
+<div id="val" class="screen valentine">
+
+<div class="vgrid">
+<div class="vtile">W</div>
+<div class="vtile">I</div>
+<div class="vtile">L</div>
+<div class="vtile">L</div>
+<div class="vtile"></div>
+
+<div class="vtile">Y</div>
+<div class="vtile">O</div>
+<div class="vtile">U</div>
+<div class="vtile"></div>
+<div class="vtile"></div>
+
+<div class="vtile">B</div>
+<div class="vtile">E</div>
+<div class="vtile"></div>
+<div class="vtile"></div>
+<div class="vtile"></div>
+
+<div class="vtile">M</div>
+<div class="vtile">Y</div>
+<div class="vtile"></div>
+<div class="vtile"></div>
+<div class="vtile"></div>
+</div>
+
+<div class="bottom">
+<div>V</div><div>A</div><div>L</div><div>E</div>
+<div>N</div><div>T</div><div>I</div><div>N</div>
+<div>E</div><div>?</div>
 </div>
 
 </div>
 
 <script>
+
+/* ---------- SCREEN SWITCH ---------- */
+
+function goValentine(){
+ document.getElementById("game").classList.remove("active");
+ document.getElementById("val").classList.add("active");
+}
+
+/* ---------- WORDLE ---------- */
 
 const answer="ilyaj";
 const phrase="willyoubemyvalentine";
@@ -129,63 +209,49 @@ let current="";
 const grid=document.getElementById("grid");
 const kb=document.getElementById("keyboard");
 
-const layout=[
-"qwertyuiop",
-"asdfghjkl",
-"zxcvbnm"
-];
-
+const layout=["qwertyuiop","asdfghjkl","zxcvbnm"];
 let keyMap={};
 
-/* BUILD GRID */
-
+/* Build grid */
 for(let i=0;i<30;i++){
  let d=document.createElement("div");
  d.className="tile";
  grid.appendChild(d);
 }
 
-/* BUILD KEYBOARD */
-
+/* Keyboard */
 layout.forEach(line=>{
  let r=document.createElement("div");
  r.className="row";
 
- line.split("").forEach(letter=>{
+ line.split("").forEach(l=>{
   let k=document.createElement("div");
   k.className="key";
-  k.textContent=letter;
-  k.onclick=()=>press(letter);
+  k.textContent=l;
+  k.onclick=()=>press(l);
   r.appendChild(k);
-  keyMap[letter]=k;
+  keyMap[l]=k;
  });
 
  kb.appendChild(r);
 });
 
-/* ENTER + DELETE ROW */
-
 let r=document.createElement("div");
 r.className="row";
 
 let enter=document.createElement("div");
+enter.className="key";
 enter.textContent="ENTER";
-enter.className="key wide";
 enter.onclick=submit;
 r.appendChild(enter);
 
 let del=document.createElement("div");
+del.className="key";
 del.textContent="⌫";
-del.className="key wide";
-del.onclick=()=>{
- current=current.slice(0,-1);
- draw();
-};
+del.onclick=()=>{current=current.slice(0,-1);draw();};
 r.appendChild(del);
 
 kb.appendChild(r);
-
-/* INPUT */
 
 function press(l){
  if(current.length<5){
@@ -200,8 +266,6 @@ function draw(){
  }
 }
 
-/* KEY COLOR PRIORITY */
-
 function colorKey(letter,color){
  let k=keyMap[letter];
  if(!k) return;
@@ -213,13 +277,10 @@ function colorKey(letter,color){
  k.classList.add(color);
 }
 
-/* SUBMIT */
-
 function submit(){
  if(current.length!==5) return;
 
  for(let i=0;i<5;i++){
-
   let tile=grid.children[row*5+i];
   let l=current[i];
   let color;
@@ -233,23 +294,14 @@ function submit(){
  }
 
  if(current===answer){
-  setTimeout(()=>alert("You got it 💗"),300);
+   setTimeout(goValentine,700);
  }
 
  row++;
  current="";
 }
 
-/* RESET */
-
 function resetGame(){
- location.reload();
-}
-
-/* GIVE UP */
-
-function giveUp(){
- alert("Answer: "+answer.toUpperCase());
  location.reload();
 }
 
