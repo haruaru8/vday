@@ -1,512 +1,246 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WORDLE</title>
+<title>Wordle</title>
 
 <style>
+body{margin:0;font-family:Arial,sans-serif;overflow:hidden}
+.screen{display:none;height:100vh;justify-content:center;align-items:center;flex-direction:column}
+.active{display:flex}
+.wordle{background:linear-gradient(#fff,#ffe4ec)}
 
-/* ---------- BASE ---------- */
+.wrapper{width:360px;text-align:center}
 
-body{
- margin:0;
- font-family:Arial,sans-serif;
- overflow:hidden;
-}
-
-.screen{
- display:none;
- height:100vh;
- justify-content:center;
- align-items:center;
- flex-direction:column;
- opacity:0;
- transition:opacity .6s ease;
-}
-
-.active{
- display:flex;
- opacity:1;
-}
-
-.wordle{ background:linear-gradient(#fff,#ffe4ec); }
-
-/* ---------- FLOAT ANIMATION ---------- */
-
-@keyframes float{
-0%{transform:translateY(0)}
-50%{transform:translateY(-6px)}
-100%{transform:translateY(0)}
-}
-
-@keyframes heartRise{
-from{transform:translateY(60px);opacity:0}
-to{transform:translateY(-700px);opacity:1}
-}
-
-/* ---------- WORDLE ---------- */
-
-.wrapper{ width:360px;text-align:center;}
-
-.grid{
- display:grid;
- grid-template-columns:repeat(5,64px);
- gap:10px;margin-bottom:25px;
-}
-
-.grid3{
- display:grid;
- grid-template-columns:repeat(3,64px);
- gap:10px;margin-bottom:10px;
-}
+.grid{display:grid;grid-template-columns:repeat(5,64px);gap:10px;margin-bottom:25px}
+.grid3{display:grid;grid-template-columns:repeat(3,64px);gap:10px;margin-bottom:10px}
 
 .tile{
- width:64px;height:64px;
- border-radius:14px;
- background:#ffdce6;
- display:flex;align-items:center;justify-content:center;
- font-size:28px;font-weight:bold;color:#000;
- box-shadow:0 3px 0 #e7a8ba;
+width:64px;height:64px;border-radius:14px;background:#ffdce6;
+display:flex;align-items:center;justify-content:center;
+font-size:28px;font-weight:bold;color:#000;
+box-shadow:0 3px 0 #e7a8ba
 }
 
-.green{background:#2ecc71;color:white;}
-.yellow{background:#f6c344;color:white;}
-.gray{background:#cfcfcf;color:white;}
+.green{background:#2ecc71;color:white}
+.yellow{background:#f6c344;color:white}
+.gray{background:#cfcfcf;color:white}
 
 .kb{display:flex;flex-direction:column;gap:8px}
 .row{display:flex;justify-content:center;gap:6px}
 
 .key{
- background:#ffdce6;
- padding:12px;border-radius:10px;
- cursor:pointer;font-weight:bold;
- box-shadow:0 3px 0 #e7a8ba;
+background:#ffdce6;padding:12px;border-radius:10px;
+cursor:pointer;font-weight:bold;
+box-shadow:0 3px 0 #e7a8ba
 }
 .key.yellow{background:#f6c344;color:white}
 .key.gray{background:#bbb;color:white}
 
-/* ---------- BUTTON ---------- */
-
 .btn{
- background:#ffdce6;border:none;
- padding:12px 18px;
- border-radius:12px;
- color:#d6336c;margin:5px;
- cursor:pointer;
- box-shadow:0 3px 0 #e7a8ba;
+background:#ffdce6;border:none;padding:12px 18px;
+border-radius:12px;color:#d6336c;margin:5px;
+cursor:pointer;box-shadow:0 3px 0 #e7a8ba
 }
 
-/* ---------- VALENTINE GRID (FIXED) ---------- */
+/* Valentine tiles */
 
-.valentine{ background:linear-gradient(#fff,#ffe4ec); cursor:pointer;}
-
-.vgrid{
- display:grid;
- grid-template-columns:repeat(5,70px);
- gap:12px;
- margin-bottom:30px;
-}
-
+.vgrid{display:grid;grid-template-columns:repeat(5,70px);gap:12px;margin-bottom:30px}
 .vtile{
- width:70px;height:70px;
- border-radius:14px;
- display:flex;align-items:center;justify-content:center;
- font-size:26px;font-weight:bold;color:white;
- background:#ffb3c7;
- box-shadow:0 4px 0 #e08aa2;
- animation:float 2s infinite ease-in-out;
+width:70px;height:70px;border-radius:14px;
+display:flex;align-items:center;justify-content:center;
+font-size:26px;font-weight:bold;color:white;
+background:#ffb3c7;box-shadow:0 4px 0 #e08aa2
 }
+.vtile:empty{background:#ffdce6;box-shadow:0 3px 0 #e7a8ba}
 
-.vtile:empty{
- background:#ffdce6;
- box-shadow:0 3px 0 #e7a8ba;
-}
-
-/* bottom tiles */
-
-.bottom{
- display:grid;
- grid-template-columns:repeat(10,70px);
- gap:12px;
-}
-
+.bottom{display:grid;grid-template-columns:repeat(10,70px);gap:12px}
 .bottom div{
- width:70px;height:70px;
- background:#ffb3c7;
- border-radius:14px;
- display:flex;align-items:center;justify-content:center;
- font-weight:bold;font-size:26px;color:white;
- box-shadow:0 4px 0 #e08aa2;
- animation:float 3s infinite ease-in-out;
+width:70px;height:70px;background:#ffb3c7;
+border-radius:14px;display:flex;align-items:center;justify-content:center;
+font-weight:bold;font-size:26px;color:white;
+box-shadow:0 4px 0 #e08aa2
 }
 
-/* ---------- SECOND TEXT ---------- */
+/* Popup */
 
-.typeText{ color:#d6336c;font-weight:bold;margin-bottom:8px;}
-.hint{ color:#ff8fb3; }
-
-/* ---------- POPUP ---------- */
-
-.popup{
- position:fixed;inset:0;
- display:none;justify-content:center;align-items:center;
- background:rgba(0,0,0,.4);
-}
-
-.popupBox{
- background:white;padding:28px;
- border-radius:16px;text-align:center;
-}
-
-#popupText{
- color:#d6336c;
- margin-bottom:20px;
- font-weight:bold;
-}
-
+.popup{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.4)}
+.popupBox{background:white;padding:28px;border-radius:16px;text-align:center}
+#popupText{color:#d6336c;margin-bottom:20px;font-weight:bold}
 .popupBox button{
- background:#ffdce6;border:none;
- padding:10px 18px;border-radius:12px;
- color:#d6336c;font-weight:bold;
- box-shadow:0 3px 0 #e7a8ba;
+background:#ffdce6;border:none;padding:10px 18px;border-radius:12px;
+color:#d6336c;font-weight:bold;box-shadow:0 3px 0 #e7a8ba
 }
 
-/* ---------- YES ---------- */
+/* YES */
 
-.yesScreen{
- background:linear-gradient(#fff,#ffe4ec);
- text-align:center;color:#d6336c;
- overflow:hidden;
-}
-
-.yesTiles{display:flex;gap:12px;margin:20px;}
-
+.yesTiles{display:flex;gap:12px;margin:20px}
 .yesTile{
- width:70px;height:70px;
- background:#ffb3c7;border-radius:14px;
- display:flex;align-items:center;justify-content:center;
- font-size:30px;font-weight:bold;color:white;
- box-shadow:0 4px 0 #e08aa2;
- animation:float 1.6s infinite;
+width:70px;height:70px;background:#ffb3c7;border-radius:14px;
+display:flex;align-items:center;justify-content:center;
+font-size:30px;font-weight:bold;color:white;
+box-shadow:0 4px 0 #e08aa2
 }
 
-.heart{
- position:absolute;font-size:22px;
- color:#ff6fa5;
- animation:heartRise linear infinite;
-}
-
- /* TILE FLIP */
-@keyframes flip {
-0%{transform:rotateX(0)}
-50%{transform:rotateX(90deg)}
-100%{transform:rotateX(0)}
-}
-.tile.flip{ animation:flip .45s ease; }
-
-/* SCREEN SHAKE (NO) */
-@keyframes shake {
-0%{transform:translateX(0)}
-25%{transform:translateX(-8px)}
-50%{transform:translateX(8px)}
-75%{transform:translateX(-6px)}
-100%{transform:translateX(0)}
-}
-.shake{ animation:shake .4s }
-
-@keyframes fall{
- from{transform:translateY(-50px) rotate(0)}
- to{transform:translateY(700px) rotate(720deg)}
-}
-
+.heart{position:absolute;font-size:22px;color:#ff6fa5;animation:rise 4s linear infinite}
+@keyframes rise{from{transform:translateY(80px)}to{transform:translateY(-700px)}}
 </style>
+
 </head>
 
 <body>
- <!-- WORDLE -->
+
 <div id="game" class="screen active wordle">
 <div class="wrapper">
 <div id="grid" class="grid"></div>
 <div id="keyboard" class="kb"></div>
-<button class="btn" onclick="resetGame()">Play Again</button>
-<button class="btn" onclick="goValentine()">Give Up?</button>
+<button class="btn" onclick="location.reload()">Play Again</button>
+<button class="btn" onclick="show('val')">Give Up?</button>
 </div>
 </div>
 
-<!-- VALENTINE -->
-<div id="val" class="screen valentine" onclick="goSecond()">
-
+<div id="val" class="screen wordle" onclick="show('second')">
 <div class="vgrid">
 <div class="vtile">W</div><div class="vtile">I</div><div class="vtile">L</div><div class="vtile">L</div><div class="vtile"></div>
 <div class="vtile">Y</div><div class="vtile">O</div><div class="vtile">U</div><div class="vtile"></div><div class="vtile"></div>
 <div class="vtile">B</div><div class="vtile">E</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
 <div class="vtile">M</div><div class="vtile">Y</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
 </div>
-
 <div class="bottom">
 <div>V</div><div>A</div><div>L</div><div>E</div>
 <div>N</div><div>T</div><div>I</div><div>N</div>
 <div>E</div><div>?</div>
 </div>
-
 </div>
 
-<!-- SECOND -->
 <div id="second" class="screen wordle">
-<div class="typeText">Type your answer...</div>
-<div id="grid2" class="grid3"></div>
+<div class="grid3" id="grid2"></div>
 <div id="keyboard2" class="kb"></div>
-<p class="hint">May hint na yan baby..</p>
+<p style="color:#ff8fb3">May hint na yan baby..</p>
 </div>
 
-<!-- POPUP -->
 <div id="popup" class="popup">
 <div class="popupBox">
 <div id="popupText"></div>
-<button onclick="closePopup()">Try Again</button>
+<button onclick="popup.style.display='none'">Try Again</button>
 </div>
 </div>
 
-<!-- YES -->
-<div id="yesScreen" class="screen yesScreen">
-<h1>Will you be my Valentine?</h1>
-
+<div id="yesScreen" class="screen wordle">
+<h1 style="color:#d6336c">I love you, Andrea Jane.</h1>
 <div class="yesTiles">
 <div class="yesTile">Y</div>
 <div class="yesTile">E</div>
 <div class="yesTile">S</div>
 </div>
-
-<h3>I love you, Andrea Jane.</h3>
-<p>See you on the 14th, my Valentine. 😛</p>
+<p style="color:#d6336c">See you on the 14th, my Valentine 😛</p>
 </div>
 
 <script>
 
-/* ---------- SCREEN SWITCH ---------- */
-
-function switchScreen(from,to){
- document.getElementById(from).classList.remove("active");
- setTimeout(()=>document.getElementById(to).classList.add("active"),250);
+/* screen switch */
+function show(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
+document.getElementById(id).classList.add('active')
 }
 
-function goValentine(){ switchScreen("game","val"); }
-function goSecond(){ switchScreen("val","second"); }
+/* WORDLE */
+const answer="ilyaj"
+const phrase="willyoubemyvalentine"
+let row=0,current=""
+const layout=["qwertyuiop","asdfghjkl","zxcvbnm"]
 
-/* ---------- WORDLE ---------- */
+const grid=document.getElementById("grid")
+const kb=document.getElementById("keyboard")
 
-const answer="ilyaj";
-const phrase="willyoubemyvalentine";
-let row=0,current="";
-const layout=["qwertyuiop","asdfghjkl","zxcvbnm"];
-const grid=document.getElementById("grid");
-const kb=document.getElementById("keyboard");
-
-for(let i=0;i<30;i++){
- let d=document.createElement("div");
- d.className="tile";
- grid.appendChild(d);
-}
+for(let i=0;i<30;i++) grid.appendChild(document.createElement("div")).className="tile"
 
 layout.forEach(line=>{
- let r=document.createElement("div");
- r.className="row";
-
+ let r=document.createElement("div")
+ r.className="row"
  line.split("").forEach(l=>{
-  let k=document.createElement("div");
-  k.className="key";
-  k.textContent=l.toUpperCase();
+  let k=document.createElement("div")
+  k.className="key"
+  k.textContent=l.toUpperCase()
+  k.onclick=()=>{if(current.length<5){current+=l;draw()}}
+  r.appendChild(k)
+ })
+ kb.appendChild(r)
+})
 
-  /* PERMANENT HIGHLIGHT */
-  if(["y","e","s"].includes(l)){
-     k.classList.add("yellow");
-  }
-  else if(["n","o"].includes(l)){
-     k.classList.add("gray");
-  }
-
-  k.onclick=()=>{
-   if(guess.length<3){
-     guess+=l;
-     g2.children[guess.length-1].textContent=l.toUpperCase();
-   }
-  };
-
-  r.appendChild(k);
- });
-
- kb2.appendChild(r);
-});
-
-let r=document.createElement("div");
-r.className="row";
-
-let enter=document.createElement("div");
-enter.className="key";
-enter.textContent="ENTER";
-enter.onclick=submit;
-r.appendChild(enter);
-
-let del=document.createElement("div");
-del.className="key";
-del.textContent="⌫";
-del.onclick=()=>{current=current.slice(0,-1);draw();};
-r.appendChild(del);
-
-kb.appendChild(r);
+let er=document.createElement("div");er.className="row"
+let enter=document.createElement("div")
+enter.className="key";enter.textContent="ENTER";enter.onclick=submit
+let del=document.createElement("div")
+del.className="key";del.textContent="⌫";del.onclick=()=>{current=current.slice(0,-1);draw()}
+er.appendChild(enter);er.appendChild(del);kb.appendChild(er)
 
 function draw(){
- for(let i=0;i<5;i++){
-  grid.children[row*5+i].textContent=(current[i]||"").toUpperCase();
- }
+for(let i=0;i<5;i++)
+grid.children[row*5+i].textContent=(current[i]||"").toUpperCase()
 }
 
 function submit(){
- if(current.length!==5) return;
-
- for(let i=0;i<5;i++){
-  let tile = grid.children[row*5+i];
-  let letter = current[i];
-  let color;
-
-  if(letter === answer[i]) color="green";
-  else if(answer.includes(letter) || phrase.includes(letter)) color="yellow";
-  else color="gray";
-
-  tile.classList.add(color);
-
-  /* ---------- UPDATE KEYBOARD COLOR ---------- */
-  document.querySelectorAll(".key").forEach(k=>{
-     if(k.textContent === letter.toUpperCase()){
-        if(color==="green"){
-           k.classList.remove("yellow","gray");
-           k.classList.add("green");
-        }
-        else if(color==="yellow" && !k.classList.contains("green")){
-           k.classList.remove("gray");
-           k.classList.add("yellow");
-        }
-        else if(color==="gray" && !k.classList.contains("green") && !k.classList.contains("yellow")){
-           k.classList.add("gray");
-        }
-     }
-  });
- }
-
- if(current===answer) setTimeout(goValentine,700);
-
- row++;
- current="";
+if(current.length!==5)return
+for(let i=0;i<5;i++){
+let tile=grid.children[row*5+i]
+let l=current[i]
+let color=l===answer[i]?"green":(answer.includes(l)||phrase.includes(l))?"yellow":"gray"
+tile.classList.add(color)
+}
+if(current===answer)setTimeout(()=>show('val'),600)
+row++;current=""
 }
 
-function resetGame(){ location.reload(); }
+/* SECOND SCREEN */
 
-/* ---------- SECOND ---------- */
+let guess=""
+const g2=document.getElementById("grid2")
+const kb2=document.getElementById("keyboard2")
 
-let guess="",noCount=0;
-const g2=document.getElementById("grid2");
-const kb2=document.getElementById("keyboard2");
-
-for(let i=0;i<3;i++){
- let t=document.createElement("div");
- t.className="tile";
- g2.appendChild(t);
-}
+for(let i=0;i<3;i++) g2.appendChild(document.createElement("div")).className="tile"
 
 layout.forEach(line=>{
- let r=document.createElement("div");
- r.className="row";
+ let r=document.createElement("div")
+ r.className="row"
  line.split("").forEach(l=>{
-  let k=document.createElement("div");
-  k.className="key";
-  k.textContent=l.toUpperCase();
-  if("yes".includes(l)) k.classList.add("yellow");
-  if("no".includes(l)) k.classList.add("gray");
+  let k=document.createElement("div")
+  k.className="key"
+  k.textContent=l.toUpperCase()
+  if("yes".includes(l))k.classList.add("yellow")
+  if("no".includes(l))k.classList.add("gray")
+  k.onclick=()=>{if(guess.length<3){guess+=l;g2.children[guess.length-1].textContent=l.toUpperCase()}}
+  r.appendChild(k)
+ })
+ kb2.appendChild(r)
+})
 
-  k.onclick=()=>{
-   if(guess.length<3){
-    guess+=l;
-    g2.children[guess.length-1].textContent=l.toUpperCase();
-   }
-  };
-  r.appendChild(k);
- });
- kb2.appendChild(r);
-});
-
-let r2=document.createElement("div");
-r2.className="row";
-
-let e2=document.createElement("div");
-e2.className="key";
-e2.textContent="ENTER";
-
-e2.onclick=()=>{
- if(guess==="no"){
- document.getElementById("second").classList.add("shake");
- setTimeout(()=>document.getElementById("second").classList.remove("shake"),400);
-
- noCount++;
-
- const msgs=[
- "NO?????? WHY??????? BAKIT???????",
- "AYOKO. ULIT. MALING SAGOT.",
- "what the....",
- "sure ka na dyan, baby?",
- "pls say yes",
- "PLEASE SAY YES",
- "nagmamakaawa na ko dito oh :(",
- "baby, mag-yes ka na please :((("
- ];
-
- showPopup(msgs[Math.min(noCount-1,msgs.length-1)]);
+let rr=document.createElement("div");rr.className="row"
+let e=document.createElement("div");e.className="key";e.textContent="ENTER"
+e.onclick=()=>{
+if(guess==="yes"){show('yesScreen');hearts()}
+else{
+popupText.textContent="Baby… mali sagot 😭"
+popup.style.display="flex"
 }
-
-else if(guess==="yes"){
- switchScreen("second","yesScreen");
- hearts();
+guess="";g2.childNodes.forEach(n=>n.textContent="")
 }
+let d=document.createElement("div");d.className="key";d.textContent="⌫"
+d.onclick=()=>{guess=guess.slice(0,-1);g2.children[guess.length].textContent=""}
+rr.appendChild(e);rr.appendChild(d);kb2.appendChild(rr)
 
- guess="";
- g2.childNodes.forEach(n=>n.textContent="");
-};
-
-r2.appendChild(e2);
-
-let d2=document.createElement("div");
-d2.className="key";
-d2.textContent="⌫";
-d2.onclick=()=>{
- guess=guess.slice(0,-1);
- g2.children[guess.length].textContent="";
-};
-
-r2.appendChild(d2);
-kb2.appendChild(r2);
-
-/* ---------- POPUP ---------- */
-
-function showPopup(t){
- document.getElementById("popupText").textContent=t;
- document.getElementById("popup").style.display="flex";
-}
-function closePopup(){
- document.getElementById("popup").style.display="none";
-}
-
-/* ---------- HEART MAGIC ---------- */
-
+/* hearts */
 function hearts(){
- for(let i=0;i<50;i++){
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="❤";
-  h.style.left=Math.random()*100+"%";
-  h.style.animationDuration=3+Math.random()*3+"s";
-  document.getElementById("yesScreen").appendChild(h);
- }
+for(let i=0;i<40;i++){
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML="❤"
+h.style.left=Math.random()*100+"%"
+yesScreen.appendChild(h)
 }
-
+}
 </script>
+
 </body>
 </html>
