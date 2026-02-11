@@ -22,9 +22,7 @@ body{
  flex-direction:column;
 }
 
-.active{
- display:flex;
-}
+.active{ display:flex; }
 
 /* ---------- WORDLE SCREEN ---------- */
 
@@ -55,9 +53,7 @@ body{
  align-items:center;
  font-size:28px;
  font-weight:bold;
- color:#333;
-
- /* ⭐ ADDED SHADOW */
+ color:#000; /* ⭐ BLACK TEXT */
  box-shadow:0 3px 0 #e7a8ba;
 }
 
@@ -76,8 +72,6 @@ body{
  text-align:center;
  cursor:pointer;
  font-weight:bold;
-
- /* ⭐ ADDED SHADOW */
  box-shadow:0 3px 0 #e7a8ba;
 }
 
@@ -86,15 +80,19 @@ body{
 .key.gray{background:#bbb;color:white}
 
 .btn{
- background:#ff6fa5;
+ background:#ffdce6;
  border:none;
  padding:12px 18px;
  border-radius:12px;
- color:white;
+ color:#d6336c;
  font-size:16px;
  margin:5px;
  cursor:pointer;
+ box-shadow:0 3px 0 #e7a8ba;
+ transition:opacity .15s;
 }
+
+.btn:active{ opacity:.5; }
 
 /* ---------- VALENTINE SCREEN ---------- */
 
@@ -112,7 +110,6 @@ body{
  margin-bottom:30px;
 }
 
-/* Filled boxes stay darker pink */
 .vtile{
  width:70px;
  height:70px;
@@ -126,34 +123,34 @@ body{
  box-shadow:0 4px 0 #e08aa2;
 }
 
-/* ⭐ EMPTY BOXES NOW MATCH WORDLE */
 .vtile:empty{
  background:#ffdce6;
  box-shadow:0 3px 0 #e7a8ba;
 }
 
-/* Filled tiles */
 .vtile:not(:empty){
  background:#ffb3c7;
 }
 
+/* ⭐ SINGLE ROW WORD */
+
 .bottom{
- display:flex;
- gap:8px;
+ display:grid;
+ grid-template-columns:repeat(10,70px);
+ gap:12px;
  justify-content:center;
- flex-wrap:wrap;
 }
 
 .bottom div{
- width:60px;
- height:60px;
+ width:70px;
+ height:70px;
  background:#ffb3c7;
- border-radius:12px;
+ border-radius:14px;
  display:flex;
  align-items:center;
  justify-content:center;
  font-weight:bold;
- font-size:22px;
+ font-size:26px;
  color:white;
  box-shadow:0 4px 0 #e08aa2;
 }
@@ -163,7 +160,7 @@ body{
 
 <body>
 
-<!-- WORDLE SCREEN -->
+<!-- WORDLE -->
 
 <div id="game" class="screen active wordle">
 
@@ -179,7 +176,7 @@ body{
 </div>
 
 
-<!-- VALENTINE SCREEN -->
+<!-- VALENTINE -->
 
 <div id="val" class="screen valentine">
 
@@ -250,7 +247,7 @@ layout.forEach(line=>{
  line.split("").forEach(l=>{
   let k=document.createElement("div");
   k.className="key";
-  k.textContent=l;
+  k.textContent=l.toUpperCase();
   k.onclick=()=>press(l);
   r.appendChild(k);
   keyMap[l]=k;
@@ -285,7 +282,7 @@ function press(l){
 
 function draw(){
  for(let i=0;i<5;i++){
-  grid.children[row*5+i].textContent=current[i]||"";
+  grid.children[row*5+i].textContent=(current[i]||"").toUpperCase();
  }
 }
 
