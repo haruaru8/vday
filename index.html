@@ -209,7 +209,8 @@ to{transform:translateY(-700px);opacity:1}
  opacity:.15;
  animation:heartRise linear infinite;
 }
- .yesScreen.active::before{
+/* YES SCREEN ENTRANCE GLOW — RESTORE */
+.yesScreen.active{
  animation:loveGlow .9s ease forwards;
 }
 
@@ -226,25 +227,8 @@ to{transform:translateY(-700px);opacity:1}
  animation:shake .35s;
 }
 
- /* SHIMMER GLOW */
-.yesScreen::before{
- content:"";
- position:absolute;
- inset:0;
- background:linear-gradient(
-   120deg,
-   transparent 20%,
-   rgba(255,255,255,.35) 40%,
-   transparent 60%
- );
- animation:shimmer 4s infinite;
- pointer-events:none;
-}
 
-@keyframes shimmer{
- 0%{transform:translateX(-100%)}
- 100%{transform:translateX(100%)}
-}
+
 
 </style>
 </head>
