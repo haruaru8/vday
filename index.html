@@ -6,60 +6,202 @@
 
 <style>
 
-/* BASE */
-body{margin:0;font-family:Arial,sans-serif;overflow:hidden;}
-.screen{display:none;height:100vh;justify-content:center;align-items:center;flex-direction:column;opacity:0;transition:.6s}
-.active{display:flex;opacity:1}
-.wordle{background:linear-gradient(#fff,#ffe4ec)}
+/* ---------- BASE ---------- */
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ overflow:hidden;
+}
 
-/* ANIMATIONS */
-@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-@keyframes heartRise{from{transform:translateY(60px);opacity:0}to{transform:translateY(-700px);opacity:1}}
-@keyframes glow{0%{transform:scale(.9);opacity:0;filter:blur(10px)}100%{transform:scale(1);opacity:1;filter:blur(0)}}
-@keyframes heartbeat{0%{transform:scale(1)}30%{transform:scale(1.12)}60%{transform:scale(.94)}100%{transform:scale(1)}}
+.screen{
+ display:none;
+ height:100vh;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ opacity:0;
+ transition:opacity .6s ease;
+}
+.active{
+ display:flex;
+ opacity:1;
+}
 
-.valentine.active,.yesScreen.active{animation:glow .8s ease}
+.wordle{ background:linear-gradient(#fff,#ffe4ec); }
 
-/* WORDLE */
-.wrapper{width:360px;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(5,64px);gap:10px;margin-bottom:20px}
-.grid3{display:grid;grid-template-columns:repeat(3,64px);gap:10px;margin-bottom:10px}
-.tile{width:64px;height:64px;border-radius:14px;background:#ffdce6;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;box-shadow:0 3px 0 #e7a8ba}
-.green{background:#2ecc71;color:#fff}
-.yellow{background:#f6c344;color:#fff}
-.gray{background:#cfcfcf;color:#fff}
+/* ---------- ANIMATIONS ---------- */
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-6px)}
+100%{transform:translateY(0)}
+}
+
+@keyframes heartRise{
+from{transform:translateY(60px);opacity:0}
+to{transform:translateY(-700px);opacity:1}
+}
+
+@keyframes loveGlow{
+0%{transform:scale(.9); opacity:0; filter:blur(8px)}
+100%{transform:scale(1); opacity:1; filter:blur(0)}
+}
+
+.valentine.active{ animation:loveGlow .9s ease forwards; }
+
+@keyframes heartbeat{
+0%{transform:scale(1)}
+30%{transform:scale(1.08)}
+60%{transform:scale(.96)}
+100%{transform:scale(1)}
+}
+
+/* ---------- WORDLE ---------- */
+.wrapper{ width:360px;text-align:center;}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(5,64px);
+ gap:10px;margin-bottom:25px;
+}
+
+.grid3{
+ display:grid;
+ grid-template-columns:repeat(3,64px);
+ gap:10px;margin-bottom:10px;
+}
+
+.tile{
+ width:64px;height:64px;
+ border-radius:14px;
+ background:#ffdce6;
+ display:flex;align-items:center;justify-content:center;
+ font-size:28px;font-weight:bold;color:#000;
+ box-shadow:0 3px 0 #e7a8ba;
+}
+
+.green{background:#2ecc71;color:white;}
+.yellow{background:#f6c344;color:white;}
+.gray{background:#cfcfcf;color:white;}
 
 .kb{display:flex;flex-direction:column;gap:8px}
 .row{display:flex;justify-content:center;gap:6px}
-.key{background:#ffdce6;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;box-shadow:0 3px 0 #e7a8ba}
+
+.key{
+ background:#ffdce6;
+ padding:12px;border-radius:10px;
+ cursor:pointer;font-weight:bold;
+ box-shadow:0 3px 0 #e7a8ba;
+}
 .key.green{background:#2ecc71;color:white}
 .key.yellow{background:#f6c344;color:white}
 .key.gray{background:#bbb;color:white}
 
-.btn{background:#ffdce6;border:none;padding:12px 18px;border-radius:12px;color:#d6336c;margin:5px;cursor:pointer}
+/* ---------- BUTTON ---------- */
+.btn{
+ background:#ffdce6;border:none;
+ padding:12px 18px;
+ border-radius:12px;
+ color:#d6336c;margin:5px;
+ cursor:pointer;
+ box-shadow:0 3px 0 #e7a8ba;
+}
 
-/* VALENTINE */
-.vgrid{display:grid;grid-template-columns:repeat(5,70px);gap:12px;margin-bottom:30px}
-.vtile{width:70px;height:70px;border-radius:14px;background:#ffb3c7;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:26px;animation:float 2s infinite}
-.vtile:empty{background:#ffdce6}
+/* ---------- VALENTINE ---------- */
+.valentine{ background:linear-gradient(#fff,#ffe4ec); cursor:pointer;}
 
-.bottom{display:grid;grid-template-columns:repeat(10,70px);gap:12px}
-.bottom div{width:70px;height:70px;border-radius:14px;background:#ffb3c7;color:white;font-size:26px;font-weight:bold;display:flex;align-items:center;justify-content:center;animation:heartbeat 1.5s infinite}
+.vgrid{
+ display:grid;
+ grid-template-columns:repeat(5,70px);
+ gap:12px;
+ margin-bottom:30px;
+}
 
-/* SECOND */
-.typeText{color:#d6336c;font-weight:bold}
-.hint{color:#ff8fb3}
+.vtile{
+ width:70px;height:70px;
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-size:26px;font-weight:bold;color:white;
+ background:#ffb3c7;
+ box-shadow:0 4px 0 #e08aa2;
+ animation:float 2s infinite ease-in-out
+}
+.vtile:empty{
+ background:#ffdce6;
+ box-shadow:0 3px 0 #e7a8ba;
+}
 
-/* POPUP */
-.popup{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.4)}
-.popupBox{background:#fff;padding:25px;border-radius:16px;text-align:center}
-.popupBox button{background:#ffdce6;border:none;padding:8px 18px;border-radius:10px}
+.bottom{
+ display:grid;
+ grid-template-columns:repeat(10,70px);
+ gap:12px;
+}
+.bottom div{
+ width:70px;height:70px;
+ background:#ffb3c7;
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-weight:bold;font-size:26px;color:white;
+ box-shadow:0 4px 0 #e08aa2;
+ animation:
+   float 3s infinite ease-in-out,
+   heartbeat 2.2s infinite ease-in-out;
+}
 
-/* YES */
-.yesScreen{background:linear-gradient(#fff,#ffe4ec);text-align:center;color:#d6336c;overflow:hidden}
-.yesTiles{display:flex;gap:12px;margin:20px}
-.yesTile{width:70px;height:70px;background:#ffb3c7;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;animation:heartbeat 1.4s infinite}
-.heart{position:absolute;font-size:22px;color:#ff6fa5;animation:heartRise linear infinite}
+/* ---------- SECOND ---------- */
+.typeText{ color:#d6336c;font-weight:bold;margin-bottom:8px;}
+.hint{ color:#ff8fb3; }
+
+/* ---------- POPUP ---------- */
+.popup{
+ position:fixed;inset:0;
+ display:none;justify-content:center;align-items:center;
+ background:rgba(0,0,0,.4);
+}
+.popupBox{
+ background:white;padding:30px;
+ border-radius:16px;text-align:center;
+}
+#popupText{
+ color:#d6336c;
+ margin-bottom:20px;
+ font-weight:bold;
+}
+.popupBox button{
+ background:#ffdce6;border:none;
+ padding:10px 20px;border-radius:12px;
+ color:#d6336c;font-weight:bold;
+ box-shadow:0 3px 0 #e7a8ba;
+}
+
+/* ---------- YES ---------- */
+.yesScreen{
+ background:linear-gradient(#fff,#ffe4ec);
+ text-align:center;color:#d6336c;
+ overflow:hidden;
+}
+.yesTiles{display:flex;gap:12px;margin:20px;}
+.yesTile{
+ width:70px;height:70px;
+ background:#ffb3c7;border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-size:30px;font-weight:bold;color:white;
+ box-shadow:0 4px 0 #e08aa2;
+ animation:float 2s infinite ease-in-out
+}
+.heart{
+ position:absolute;font-size:22px;
+ color:#ff6fa5;
+ animation:heartRise linear infinite;
+}
+.bgHeart{
+ position:absolute;
+ font-size:18px;
+ opacity:.15;
+ animation:heartRise linear infinite;
+}
+ .yesScreen.active{
+ animation:loveGlow .9s ease forwards;
+}
 
 </style>
 </head>
@@ -84,6 +226,7 @@ body{margin:0;font-family:Arial,sans-serif;overflow:hidden;}
 <div class="vtile">B</div><div class="vtile">E</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
 <div class="vtile">M</div><div class="vtile">Y</div><div class="vtile"></div><div class="vtile"></div><div class="vtile"></div>
 </div>
+
 <div class="bottom">
 <div>V</div><div>A</div><div>L</div><div>E</div>
 <div>N</div><div>T</div><div>I</div><div>N</div>
@@ -110,17 +253,27 @@ body{margin:0;font-family:Arial,sans-serif;overflow:hidden;}
 <!-- YES -->
 <div id="yesScreen" class="screen yesScreen">
 <h1>Will you be my Valentine?</h1>
-<div class="yesTiles"><div class="yesTile">Y</div><div class="yesTile">E</div><div class="yesTile">S</div></div>
+<div class="yesTiles">
+<div class="yesTile">Y</div>
+<div class="yesTile">E</div>
+<div class="yesTile">S</div>
+</div>
 <h3>I love you, Andrea Jane.</h3>
-<p>See you on the 14th, my Valentine 😛</p>
+<p>See you on the 14th, my Valentine. 😛</p>
 </div>
 
 <script>
 
 /* SCREEN SWITCH */
-function switchScreen(f,t){document.getElementById(f).classList.remove("active");setTimeout(()=>document.getElementById(t).classList.add("active"),250)}
-function goValentine(){switchScreen("game","val")}
-function goSecond(){switchScreen("val","second")}
+function switchScreen(from,to){
+ document.getElementById(from).classList.remove("active")
+ setTimeout(()=>document.getElementById(to).classList.add("active"),250)
+}
+function goValentine(){
+ switchScreen("game","val")
+ valHearts()
+}
+function goSecond(){ switchScreen("val","second") }
 
 /* WORDLE */
 const answer="ilyaj"
@@ -129,34 +282,55 @@ let row=0,current=""
 const layout=["qwertyuiop","asdfghjkl","zxcvbnm"]
 const grid=document.getElementById("grid")
 const kb=document.getElementById("keyboard")
+
+for(let i=0;i<30;i++){
+ let d=document.createElement("div")
+ d.className="tile"
+ grid.appendChild(d)
+}
+
 let keyMap={}
-
-for(let i=0;i<30;i++){let d=document.createElement("div");d.className="tile";grid.appendChild(d)}
-
 layout.forEach(line=>{
- let r=document.createElement("div");r.className="row"
+ let r=document.createElement("div")
+ r.className="row"
  line.split("").forEach(l=>{
   let k=document.createElement("div")
-  k.className="key";k.textContent=l.toUpperCase()
+  k.className="key"
+  k.textContent=l.toUpperCase()
   k.onclick=()=>{if(current.length<5){current+=l;draw()}}
-  r.appendChild(k);keyMap[l]=k
+  r.appendChild(k)
+  keyMap[l]=k
  })
  kb.appendChild(r)
 })
 
-let r=document.createElement("div");r.className="row"
-let e=document.createElement("div");e.className="key";e.textContent="ENTER";e.onclick=submit;r.appendChild(e)
-let d=document.createElement("div");d.className="key";d.textContent="⌫";d.onclick=()=>{current=current.slice(0,-1);draw()};r.appendChild(d)
+let r=document.createElement("div")
+r.className="row"
+let enter=document.createElement("div")
+enter.className="key"
+enter.textContent="ENTER"
+enter.onclick=submit
+r.appendChild(enter)
+let del=document.createElement("div")
+del.className="key"
+del.textContent="⌫"
+del.onclick=()=>{current=current.slice(0,-1);draw()}
+r.appendChild(del)
 kb.appendChild(r)
 
-function draw(){for(let i=0;i<5;i++)grid.children[row*5+i].textContent=(current[i]||"").toUpperCase()}
+function draw(){
+ for(let i=0;i<5;i++)
+ grid.children[row*5+i].textContent=(current[i]||"").toUpperCase()
+}
 
 function submit(){
- if(current.length!==5)return
+ if(current.length!==5) return
  for(let i=0;i<5;i++){
   let l=current[i]
-  let color=l===answer[i]?"green":(answer.includes(l)||phrase.includes(l))?"yellow":"gray"
+  let color=l===answer[i]?"green":
+             (answer.includes(l)||phrase.includes(l))?"yellow":"gray"
   grid.children[row*5+i].classList.add(color)
+
   let k=keyMap[l]
   if(k){
    if(color==="green"){k.classList.remove("yellow","gray");k.classList.add("green")}
@@ -165,12 +339,12 @@ function submit(){
   }
  }
  if(current===answer)setTimeout(goValentine,700)
- row++;current=""
+ row++
+ current=""
 }
-
 function resetGame(){location.reload()}
 
-/* YES/NO SECOND */
+/* SECOND YES/NO */
 let guess="",noCount=0
 const g2=document.getElementById("grid2")
 const kb2=document.getElementById("keyboard2")
@@ -178,9 +352,12 @@ const kb2=document.getElementById("keyboard2")
 for(let i=0;i<3;i++){let t=document.createElement("div");t.className="tile";g2.appendChild(t)}
 
 layout.forEach(line=>{
- let r=document.createElement("div");r.className="row"
+ let r=document.createElement("div")
+ r.className="row"
  line.split("").forEach(l=>{
-  let k=document.createElement("div");k.className="key";k.textContent=l.toUpperCase()
+  let k=document.createElement("div")
+  k.className="key"
+  k.textContent=l.toUpperCase()
   if("yes".includes(l))k.classList.add("yellow")
   if("no".includes(l))k.classList.add("gray")
   k.onclick=()=>{if(guess.length<3){guess+=l;g2.children[guess.length-1].textContent=l.toUpperCase()}}
@@ -189,22 +366,50 @@ layout.forEach(line=>{
  kb2.appendChild(r)
 })
 
-let r2=document.createElement("div");r2.className="row"
-let e2=document.createElement("div");e2.className="key";e2.textContent="ENTER"
+let r2=document.createElement("div")
+r2.className="row"
+let e2=document.createElement("div")
+e2.className="key"
+e2.textContent="ENTER"
 e2.onclick=()=>{
- if(guess==="no"){showPopup("baby mag yes ka 😭")}
- else if(guess==="yes"){switchScreen("second","yesScreen");hearts()}
- guess="";g2.childNodes.forEach(n=>n.textContent="")
+ if(guess==="no"){
+  noCount++
+  const msgs=[
+"NO?????? WHY??????? BAKIT???????",
+"AYOKO. ULIT. MALING SAGOT.",
+"what the....",
+"sure ka na dyan, baby?",
+"pls say yes",
+"PLEASE SAY YES",
+"nagmamakaawa na ko dito oh :(",
+"baby, mag-yes ka na please :((("
+  ]
+  showPopup(msgs[Math.min(noCount-1,msgs.length-1)])
+ }
+ else if(guess==="yes"){
+ switchScreen("second","yesScreen")
+ setTimeout(hearts,300)
+}
+ guess=""
+ g2.childNodes.forEach(n=>n.textContent="")
 }
 r2.appendChild(e2)
-let d2=document.createElement("div");d2.className="key";d2.textContent="⌫"
+
+let d2=document.createElement("div")
+d2.className="key"
+d2.textContent="⌫"
 d2.onclick=()=>{guess=guess.slice(0,-1);g2.children[guess.length].textContent=""}
 r2.appendChild(d2)
 kb2.appendChild(r2)
 
-function showPopup(t){document.getElementById("popupText").textContent=t;document.getElementById("popup").style.display="flex"}
+/* POPUP */
+function showPopup(t){
+ document.getElementById("popupText").textContent=t
+ document.getElementById("popup").style.display="flex"
+}
 function closePopup(){document.getElementById("popup").style.display="none"}
 
+/* HEART EFFECTS */
 function hearts(){
  for(let i=0;i<50;i++){
   let h=document.createElement("div")
