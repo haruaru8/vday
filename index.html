@@ -312,7 +312,9 @@ function switchScreen(from,to){
  document.getElementById(from).classList.remove("active")
  setTimeout(()=>document.getElementById(to).classList.add("active"),250)
 }
- 
+function goValentine(){
+ switchScreen("game","val")
+}
 function goSecond(){ switchScreen("val","second") }
 
 /* WORDLE */
